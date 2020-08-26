@@ -3,8 +3,21 @@ name: Build CLI
 on: [push]
 
 jobs:
+
+  setup_artifacts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Upload simple readme
+        uses: actions/upload-artifact@v2
+        with:
+          name: clis
+          path: README.md
+
   build:
     runs-on: ${{ matrix.os }}
+    needs: setup_artifact
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
