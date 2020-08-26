@@ -17,7 +17,7 @@ jobs:
         uses: ayltai/setup-graalvm@v1
         with:
           graalvm-version: 20.1.0
-          java-version: 8
+          java-version: 11
           native-image: true
       
       - run: java -version
@@ -50,7 +50,7 @@ jobs:
         uses: ayltai/setup-graalvm@v1
         with:
           graalvm-version: 20.1.0
-          java-version: 8
+          java-version: 11
           native-image: true
 
       - run: java -version
