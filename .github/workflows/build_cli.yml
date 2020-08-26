@@ -13,7 +13,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: clis
-          path: README.md
+          path: LICENSE
 
   build:
     runs-on: ${{ matrix.os }}
@@ -28,7 +28,7 @@ jobs:
         uses: ayltai/setup-graalvm@v1
         with:
           graalvm-version: 20.1.0
-          java-version: 11
+          java-version: 8
           native-image: true
       
       - run: java -version
