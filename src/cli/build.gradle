@@ -6,6 +6,8 @@ plugins {
 
 mainClassName = 'com.olyno.skriptcli.App'
 
+sourceCompatibility = 1.11
+
 repositories {
     jcenter()
 }
