@@ -42,8 +42,19 @@ jobs:
       - name: Build CLI
         run: ./gradlew nativeImage
 
-      - name: Add built CLI
-        run: mv build/graal/skript clis
+      - run: |
+          ls -lh build
+          ls -lh build/graal
+          ls -lh build/graal/skript
+
+      - name: Add built CLI (Linux & Mac)
+        shell: bash
+        run: |
+         if [ "$RUNNER_OS" == "Windows" ]; then
+            move build/graal/skript clis
+         else
+            mv build/graal/skript clis
+         fi
 
       - name: Upload native CLIS
         uses: actions/upload-artifact@v2
