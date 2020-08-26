@@ -26,4 +26,6 @@ task copyJar(type: Copy) {
     into new File(rootProject.projectDir, 'build/libs')
 }
 
+build.dependsOn tasks.getByName('nativeImage')
 build.finalizedBy copyJar
+tasks.nativeImage.outputs.upToDateWhen { false }

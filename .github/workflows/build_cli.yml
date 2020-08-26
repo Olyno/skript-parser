@@ -4,23 +4,12 @@ on: [push]
 
 jobs:
 
-  setup_artifacts:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Upload simple readme
-        uses: actions/upload-artifact@v2
-        with:
-          name: clis
-          path: LICENSE
-
-  build:
+  build-ubuntu-mac:
     runs-on: ${{ matrix.os }}
-    needs: setup_artifacts
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest, macOS-latest]
+
     steps:
       - uses: actions/checkout@v2
 
@@ -32,35 +21,57 @@ jobs:
           native-image: true
       
       - run: java -version
+  
+      - name: Build with Gradle
+        run: ./gradlew build
 
-      - name: Download others native CLIS
-        uses: actions/download-artifact@v2
-        with:
-          name: clis
-          path: clis
-
-      - name: Build CLI
-        run: |
-          ./gradlew nativeImage
-          ls -lh
-
-      - run: |
-          ls -lh
-          ls -lh build
-          ls -lh build/graal
-          ls -lh build/graal/skript
-
-      - name: Add built CLI (Linux & Mac)
+      - name: Rename the artifact to OS-unique name
         shell: bash
         run: |
-         if [ "$RUNNER_OS" == "Windows" ]; then
-            move build/graal/skript clis
-         else
-            mv build/graal/skript clis
-         fi
+          value=`cp build/graal/checksum build/graal/checksum-${{ matrix.os }}`
 
-      - name: Upload native CLIS
-        uses: actions/upload-artifact@v2
+      - name: Publish artifact
+        uses: actions/upload-artifact@master
         with:
-          name: clis
-          path: clis
+          name: checksum-${{ matrix.os }}
+          path: build/graal
+
+  build-windows:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-2016, windows-latest]
+
+    steps:
+      - uses: actions/checkout@v2
+
+     - name: Set up GraalVM
+        uses: ayltai/setup-graalvm@v1
+        with:
+          graalvm-version: 20.1.0
+          java-version: 8
+          native-image: true
+
+      - run: java -version
+
+      - name: Set up Visual C Build Tools Workload for Visual Studio 2017 Build Tools
+        run: |
+          choco install visualstudio2017-workload-vctools
+
+      - name: set env variables and run the Gradle build
+        shell: cmd
+        run: |
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC\Auxiliary\Build\vcvars64.bat"
+          ./gradlew build
+      
+      - name: Rename the artifact to OS-unique name
+        shell: bash
+        run: |
+          value=`cp build/graal/checksum build/graal/checksum-${{ matrix.os }}`
+
+      - name: Publish artifact
+        uses: actions/upload-artifact@master
+        with:
+          name: checksum-${{ matrix.os }}.exe
+          path: build/graal
