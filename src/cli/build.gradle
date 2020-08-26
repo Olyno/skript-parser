@@ -9,10 +9,8 @@ buildscript {
     }
 }
 
-plugins {
-    id 'java'
-}
-
+apply plugin: 'java'
+apply plugin: 'application'
 apply plugin: 'org.mikeneck.graalvm-native-image'
 
 mainClassName = 'com.olyno.skriptcli.App'
