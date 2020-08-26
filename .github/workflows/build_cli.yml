@@ -43,7 +43,7 @@ jobs:
         run: ./gradlew nativeImage
 
       - name: Add built CLI
-        run: mv build/graal/** clis
+        run: mv build/graal/skript clis
 
       - name: Upload native CLIS
         uses: actions/upload-artifact@v2
