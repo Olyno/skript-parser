@@ -31,7 +31,7 @@ jobs:
         run: mv build/graal/** clis
 
       - name: Upload native CLIS
-      - uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v2
         with:
           name: clis
           path: clis
