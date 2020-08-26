@@ -43,6 +43,7 @@ jobs:
         run: ./gradlew nativeImage
 
       - run: |
+          ls -lh
           ls -lh build
           ls -lh build/graal
           ls -lh build/graal/skript
