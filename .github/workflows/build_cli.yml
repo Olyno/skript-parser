@@ -40,7 +40,9 @@ jobs:
           path: clis
 
       - name: Build CLI
-        run: ./gradlew nativeImage
+        run: |
+          ./gradlew nativeImage
+          ls -lh
 
       - run: |
           ls -lh
