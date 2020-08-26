@@ -46,7 +46,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-     - name: Set up GraalVM
+      - name: Set up GraalVM
         uses: ayltai/setup-graalvm@v1
         with:
           graalvm-version: 20.1.0
