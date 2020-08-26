@@ -1,24 +1,33 @@
+buildscript {
+    repositories {
+        maven {
+            url 'https://plugins.gradle.org/m2/'
+        }
+    }
+    dependencies {
+        classpath 'gradle.plugin.org.mikeneck:graalvm-native-image-plugin:0.8.0'
+    }
+}
+
 plugins {
     id 'java'
-    id 'application'
-    id 'com.palantir.graal' version '0.7.1'
 }
+
+apply plugin: 'org.mikeneck.graalvm-native-image'
 
 mainClassName = 'com.olyno.skriptcli.App'
 
 sourceCompatibility = 1.11
+targetCompatibility = 1.11
 
 repositories {
     jcenter()
+    mavenCentral()
+    mavenLocal()
 }
 
 dependencies {
     testImplementation 'junit:junit:4.12'
-}
-
-graal {
-    mainClass mainClassName
-    outputName 'skript'
 }
 
 task copyJar(type: Copy) {
@@ -26,6 +35,15 @@ task copyJar(type: Copy) {
     into new File(rootProject.projectDir, 'build/libs')
 }
 
-build.dependsOn tasks.getByName('nativeImage')
+nativeImage {
+    graalVmHome = System.getProperty('java.home')
+    mainClass = mainClassName
+    executableName = 'checksum'
+    arguments(
+        '--no-fallback',
+        '--report-unsupported-elements-at-runtime'
+    )
+}
+
 build.finalizedBy copyJar
 tasks.nativeImage.outputs.upToDateWhen { false }
