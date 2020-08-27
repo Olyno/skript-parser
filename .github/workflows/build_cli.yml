@@ -52,4 +52,4 @@ jobs:
         uses: actions/upload-artifact@master
         with:
           name: skript-${{ matrix.os }}
-          path: src/cli/build/graal/skript
+          path: src/cli/build/graal/skript.exe
