@@ -21,13 +21,11 @@ jobs:
       - name: Build with Gradle
         run: gradle nativeImage
 
-      - run: ls src/cli
-
-      # - name: Publish artifact
-      #   uses: actions/upload-artifact@master
-      #   with:
-      #     name: checksum-${{ matrix.os }}
-      #     path: build/graal
+      - name: Publish artifact
+        uses: actions/upload-artifact@master
+        with:
+          name: skript-${{ matrix.os }}
+          path: src/cli/build/graal/skript
 
   build-windows:
     runs-on: windows-latest
@@ -49,8 +47,8 @@ jobs:
           call "C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC\Auxiliary\Build\vcvars64.bat"
           ./gradlew build
 
-      # - name: Publish artifact
-      #   uses: actions/upload-artifact@master
-      #   with:
-      #     name: checksum-${{ matrix.os }}.exe
-      #     path: build/graal
+      - name: Publish artifact
+        uses: actions/upload-artifact@master
+        with:
+          name: skript-${{ matrix.os }}
+          path: src/cli/build/graal/skript
